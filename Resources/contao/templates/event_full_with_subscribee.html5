@@ -1,0 +1,74 @@
+<?php
+// var_dump($this);
+?>
+
+<div class="event layout_full_with_subscribee block<?= $this->class; ?>" itemscope itemtype="http://schema.org/Event">
+    <h1 itemprop="name"><?= $this->title ?></h1>
+    <p class="info"><time datetime="<?= $this->datetime ?>" itemprop="startDate"><?= $this->date ?><?php if ($this->time): ?>, <?= $this->time ?><?php endif; ?></time></p>
+
+    <?php if ($this->recurring): ?>
+        <p class="recurring"><?= $this->recurring ?><?php if ($this->until) echo ' ' . $this->until; ?>.</p>
+    <?php endif; ?>
+
+    <?php if ($this->hasDetails): ?>
+        <?= $this->details ?>
+    <?php else: ?>
+        <div class="ce_text block">
+            <?php if (!$this->addBefore): ?>
+                <?= $this->teaser ?>
+            <?php endif; ?>
+
+            <?php if ($this->addImage): ?>
+                <?php $this->insert('image', $this->arrData); ?>
+            <?php endif; ?>
+
+            <?php if ($this->addBefore): ?>
+                <?= $this->teaser ?>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
+
+    <?php if ($this->location): ?>
+        <p class="location"><?= $this->locationLabel ?>: <?= $this->location ?></p>
+    <?php endif; ?>
+
+    <?php if ($this->enclosure): ?>
+        <ul class="enclosure">
+            <?php foreach ($this->enclosure as $enclosure): ?>
+                <li class="download-element ext-<?= $enclosure['extension'] ?>">
+                    <a href="<?= $enclosure['href'] ?>" title="<?= $enclosure['title'] ?>"><?= $enclosure['link'] ?> <span class="size">(<?= $enclosure['filesize'] ?>)</span></a>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+    <div class="sign-in-out">
+        <?php
+        if($this->eventId > 0 && $this->enableSubscribee === "1") :
+            if($this->loggedIn) :
+                if(!$this->singedIn) :
+                    if($pin['subscribee_withLimit'] === '1'):
+                        if ($this->freePlaces == 1): ?>
+                            <p>Es ist noch <?= $this->freePlaces; ?> Platz von <?= $this->maxPlaces; ?> frei. <br>
+                        <?php else: ?>
+                            Es sind noch <?= $this->freePlaces; ?> Plätze von <?= $this->maxPlaces; ?> frei.<br>
+                        <?php endif; ?>
+                        Somit sind bereits  <?= $this->resPlaces; ?> reserviert.</p>
+                    <?php endif; ?>
+                    <?php if($pin['subscribee_withSignOut']): ?>
+                        <div class="form-header"><strong>An/Abmelden</strong></div>
+                    <?php else: ?>
+                        <div class="form-header"><strong>Anmelden</strong></div>
+                    <?php endif; ?>
+                    {{generateForm::<?= $this->eventId; ?>}}
+                <?php else: ?>
+                    <p>Sie haben sich bereits An/Abgemeldet.</p>
+                <?php endif; ?>
+            <?php else: ?>
+                <p>Zur Teilnahme vorher anmelden.</p>
+                {{link_open::12}}<i class="fa fa-arrow-right"></i> Login{{link_close}}
+            <?php endif; ?>
+        <?php elseif ($this->articleId > 0) : ?>
+            {{insert_article::<?= $this->articleId; ?>}}
+        <?php endif; ?>
+    </div>
+</div>

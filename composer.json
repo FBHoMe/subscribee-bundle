@@ -1,0 +1,33 @@
+{
+    "name": "home/subscribee-bundle",
+    "type": "contao-bundle",
+    "version": "0.1.0",
+    "description": "Adds Subscribee to Contao 4",
+    "keywords":["contao","subscribee"],
+    "license": "LGPL-3.0+",
+    "authors": [
+        {
+            "name": "HolsteinMedia",
+            "homepage": "http://www.holsteinmedia.com"
+        }
+    ],
+    "require": {
+        "php": "^5.6|^7.1",
+        "contao/core-bundle": "^4.4.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Home\\SubscribeeBundle\\": ""
+        },
+        "classmap": [
+            "Resources/contao/"
+        ],
+        "exclude-from-classmap": [
+            "Resources/contao/config/",
+            "Resources/contao/templates/"
+        ]
+    },
+    "extra": {
+        "contao-manager-plugin": "Home\\KiteeBundle\\ContaoManager\\Plugin"
+    }
+}

@@ -1,0 +1,13 @@
+<div class="<?= $this->class ?> subscribee-signed-out subscribee-participate block">
+    <div class="subscribee-participate-title"><h2>Abgemeldet sind</h2></div>
+    <div class="subscribee-participate-content">
+        <?php if(is_array($this->pins) && count($this->pins) > 0) : ?>
+            <?php foreach($this->pins as $key=>$signedOut) : ?>
+                <?= $key+1 . '.&nbsp;' . $signedOut ?><br>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p><i>Noch keine Abmeldung eingegangen.</i></p>
+        <?php endif; ?>
+    </div>
+</div>
+

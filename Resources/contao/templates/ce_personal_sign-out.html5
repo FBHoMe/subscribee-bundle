@@ -1,0 +1,32 @@
+<?php
+$events = array();
+$status = 'signOut';
+
+if(is_array($this->pins) && count($this->pins) > 0) {
+    foreach ($this->pins as $key => $event) {
+        if ($event['subscribee_data']['subscribe_data']['status'] == $status) {
+            $events[]= $event;
+        }
+    }
+}
+?>
+<div class="<?= $this->class ?> subscribee-personal-participation subscribee-participate block">
+    <?php if(count($events) > 0) : ?>
+        <?php foreach($events as $key=>$event) : ?>
+            <div class="subscribee-participate-content">
+                <time datetime="<?php echo $event['event']['startTime'] ?>">
+                    <?= $this->parseDate('l, j. F Y', $event['event']['startTime']); ?>
+                    <?php if ($event['event']['addTime'] === 1): ?>, <?= $this->parseDate('G:H', $event['event']['startTime']); ?><?php endif; ?>
+                </time>
+                <?php if ($event['event']['location'] != "") : ?>
+                    <span class="location"><?php echo $event['event']['location']; ?></span>
+                <?php endif; ?>
+                <span class="name"><?= $event['event']['title'] ?></span>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <div class="subscribee-participate-content">
+            <p><i>Bei keinem Event abgemeldet.</i></p>
+        </div>
+    <?php endif; ?>
+</div>

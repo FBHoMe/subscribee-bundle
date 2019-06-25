@@ -1,0 +1,99 @@
+<?php
+$pin = $this->pin;
+?>
+<div class="list-element <?= $this->class; ?>"<?= $this->cssID; ?><?php if ($this->style): ?> style="<?= $this->style; ?>"<?php endif; ?>>
+
+    <div class="title"><h1><?=$pin['title']?></h1></div>
+    <div class="image"
+        <?php
+        if($pin['gallery']){
+            if(is_array($pin['gallery']) && array_key_exists('uuid', $pin['gallery'])){
+                ?>
+                style="background: url('{{fileFromUuid::<?=$pin['gallery']['uuid']?>?size=1}}');background-size: contain;"
+                <?php
+            }else
+                if(is_array($pin['gallery']) && !array_key_exists('uuid', $pin['gallery'])) {
+                    ?>
+                    style="background: url('{{fileFromUuid::<?=$pin['gallery'][0]?>?size=1}}'); background-size: contain;"
+                    <?php
+                }else{
+                    ?>
+                    style="background: url('{{fileFromUuid::<?=$pin['gallery']?>?size=1}}'); background-size: contain;"
+                    <?php
+                }
+        }
+        ?>
+    ></div>
+    <div class="date-time"><?php
+        if($pin['addTime'] === '1'){
+            $timeFormat = \Config::get('timeFormat');
+            ?>
+            <div class="time flex"><?=\Date::parse($timeFormat, $pin['startTime']) . ' - ' . \Date::parse($timeFormat, $pin['endTime'])?></div>
+        <?php
+        }
+        $dateFormat = \Config::get('dateFormat');
+        if($pin['startDate'] === $pin['endDate']){
+            ?>
+            <div class="date flex"><?=\Date::parse($dateFormat, $pin['startDate'])?></div>
+        <?php
+        }else{
+            ?>
+            <div class="date"><?=\Date::parse($dateFormat, $pin['startDate']) . ' - ' . \Date::parse($dateFormat, $pin['endDate'])?></div>
+        <?php
+        }
+    ?></div>
+
+    <div class="tile-content">
+        <div class="location"><?=$pin['location'] === '' ? : 'Veranstaltungsort: '. $pin['location']?></div>
+        <div class="text"><?=$pin['text']?></div>
+        <div class="hm-hr"></div>
+        <div class="sign-in-out">
+        <?php
+        if($this->eventId > 0 && $this->enableSubscribee === "1"){
+            if($this->loggedIn){
+                if(!$this->singedIn){
+                    if($pin['subscribee_withLimit'] === '1'){
+                        if ($this->freePlaces == 1){
+                            ?>
+                            <p>Es ist noch <?= $this->freePlaces; ?> Platz von <?= $this->maxPlaces; ?> frei. <br>
+                            <?php
+                        }else{
+                            ?>
+                            Es sind noch <?= $this->freePlaces; ?> Plätze von <?= $this->maxPlaces; ?> frei.<br>
+                            <?php
+                        }
+                        ?>
+                        Somit sind bereits  <?= $this->resPlaces; ?> reserviert.</p>
+                        <?php
+                    }
+                    if($pin['subscribee_withSignOut']){
+                        ?>
+                        <div class="form-header"><strong>An/Abmelden</strong></div>
+                        <?php
+                    }else{
+                        ?>
+                        <div class="form-header"><strong>Anmelden</strong></div>
+                        <?php
+                    }
+                    ?>
+                    {{generateForm::<?= $this->eventId; ?>}}
+                    <?php
+                }else{
+                    ?>
+                    <p>Sie haben sich bereits An/Abgemeldet.</p>
+                    <?php
+                }
+            }else{
+                ?>
+                <p>Zur Teilnahme vorher anmelden.</p>
+                {{link_open::12}}<i class="fa fa-arrow-right"></i> Login{{link_close}}
+                <?php
+            }
+
+        }elseif ($this->articleId > 0) {
+            ?>{{insert_article::<?= $this->articleId; ?>}}<?php
+        }
+        ?>
+        </div>
+    </div>
+</div>

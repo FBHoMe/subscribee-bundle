@@ -1,0 +1,13 @@
+<div class="<?= $this->class ?> subscribee-signed-in subscribee-participate block">
+    <div class="subscribee-participate-title"><h2>Angemeldet sind</h2></div>
+    <div class="subscribee-participate-content">
+        <?php if(is_array($this->pins) && count($this->pins) > 0) : ?>
+            <?php foreach($this->pins as $key=>$signedIn) : ?>
+                <?= $key+1 . '.&nbsp;' . $signedIn ?><br>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p><i>Noch keine Anmeldung eingegangen.</i></p>
+        <?php endif; ?>
+    </div>
+</div>
+
