@@ -50,7 +50,7 @@ $tl_subscribee
     ))
     ->addField('tstamp', 'tstamp')
     ->addField('integer','places')
-    ->addField(blob, 'subscribe_data');
+    ->addField('blob', 'subscribe_data');
 
 }catch(\Exception $e){
     var_dump($e);
