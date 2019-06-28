@@ -28,6 +28,6 @@
         ]
     },
     "extra": {
-        "contao-manager-plugin": "Home\\KiteeBundle\\ContaoManager\\Plugin"
+        "contao-manager-plugin": "Home\\SubscribeeBundle\\ContaoManager\\Plugin"
     }
 }

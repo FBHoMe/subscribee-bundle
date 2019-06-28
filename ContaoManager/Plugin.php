@@ -4,7 +4,7 @@
  * Contao Manager Plugin
  */
 
-namespace Home\KiteeBundle\ContaoManager;
+namespace Home\SubscribeeBundle\ContaoManager;
 
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
@@ -21,7 +21,7 @@ class Plugin implements BundlePluginInterface, RoutingPluginInterface
     public function getBundles(ParserInterface $parser)
     {
         return [
-            BundleConfig::create('Home\KiteeBundle\HomeSubscribeeBundle')
+            BundleConfig::create('Home\SubscribeeBundle\HomeSubscribeeBundle')
                 ->setLoadAfter(['Contao\CoreBundle\ContaoCoreBundle'])
                 ->setReplace(['subscribee']),
         ];
