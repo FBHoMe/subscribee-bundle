@@ -55,24 +55,6 @@ class ProcessFormData
                 unset($data['FORM_SUBMIT']);
             }
 
-            #-- user
-            $user = \FrontendUser::getInstance();
-            $data['userId'] = $user->id;
-
-            $memberEvents = Models\Subscribee::getAllEventsByMemberId($user->id);
-
-            if(is_array($memberEvents) && count($memberEvents) > 0 && array_key_exists($objEvent->id, $memberEvents)){
-                #-- delete existing subscribee data
-                $db = \Database::getInstance();
-                $sql = '
-                    DELETE
-                    FROM tl_subscribee
-                    WHERE tl_subscribee.subscribe_data LIKE  \'%"userId";s:_:"' . $user->id . '%\'
-                    AND pid = ' . $objEvent->id . '
-                ';
-                $db->prepare($sql)->execute();
-            }
-
             #-- write new subscribee data
             $objSubscribee = new Models\Subscribee();
             $objSubscribee->pid 			= $objEvent->id;
@@ -95,50 +77,23 @@ class ProcessFormData
             $arrSubmitted['eventEndTime'] 		= $endTime->time;
             $arrSubmitted['eventEndDate'] 		= $endDate->date;
 
-            #-- Anmeldung / Abmeldung
-            if($data['status'] === 'signOut'){
-                $statusStr = 'Abmeldung';
-            }else{
-                $statusStr = 'Anmeldung';
-            }
-
-            #-- Anreise / Abreise
-            if($data['anreise'] === ''){
-                $anreise = ' - ';
-            }else{
-                $tempdate = new \Date($data['anreise']);
-                $anreise = $tempdate->date;
-            }
-            if($data['abreise'] === ''){
-                $abreise = ' - ';
-            }else{
-                $tempdate = new \Date($data['abreise']);
-                $abreise = $tempdate->date;
-            }
-
             #-- send mails
             $mailer = new \Contao\Email();
-            $mailer->subject = $subjectCustomer;
+            $mailer->subject = 'Anmeldung zur Veranstaltung:'. $objEvent->title;
             // todo html content for email
             $mailer->html =
-                '<h1>'. $statusStr . ' zur Veranstaltung: ' . $objEvent->title . '</h1>' .
-                'Mitgleid: ' . $data['name'] . '<br>' .
+                '<h1>Anmeldung zur Veranstaltung: ' . $objEvent->title . '</h1>' .
                 'Ort: ' . $objEvent->location . '<br>' .
                 'Datum: ' . $startDate->date . ' - ' . $endDate->date . '<br>' .
                 'Uhrzeit: ' . $startTime->time . ' - ' . $endTime->time . '<br>' .
-                'Benötige ein Zimmer: ' . ($data['zimmer'] === '' ? 'Nein' : 'Ja') . '<br>' .
-                'Anreise: ' . $anreise . '<br>' .
-                'Abreise: ' . $abreise . '<br>' .
-                'Vegetarische Verpflegung erwünscht: ' . ($data['vegetarisch'] === '' ? 'Nein' : 'Ja') . '<br>' .
-                'Nachricht: ' . ($data['nachricht'] === '' ? ' - ' : $data['nachricht'])
+                'Plätze: ' .  $places
             ;
             $mailer->from = $from;
             $mailer->fromName = $fromName;
             #-- send to user
-            // todo get user email
-            $mailer->sendTo($user->email);
+            $mailer->sendTo($arrSubmitted['email'] );
             #-- send to system
-            $mailer->subject = $subjectSystem;
+            $mailer->subject = 'Anmeldung zur Veranstaltung:'. $objEvent->title;
             $mailer->sendTo($recipientSystem);
         }
         return $arrSubmitted;
