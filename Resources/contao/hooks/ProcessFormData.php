@@ -81,12 +81,19 @@ class ProcessFormData
             $mailer = new \Contao\Email();
             $mailer->subject = 'Anmeldung zur Veranstaltung:'. $objEvent->title;
             // todo html content for email
+            $mailData = "";
+            foreach($data as $key=>$value) {
+                if ($value !== "") {
+                    $mailData .= $key . ': ' . $value . '<br>';
+                }
+            }
+
             $mailer->html =
                 '<h1>Anmeldung zur Veranstaltung: ' . $objEvent->title . '</h1>' .
                 'Ort: ' . $objEvent->location . '<br>' .
                 'Datum: ' . $startDate->date . ' - ' . $endDate->date . '<br>' .
                 'Uhrzeit: ' . $startTime->time . ' - ' . $endTime->time . '<br>' .
-                'Plätze: ' .  $places
+                'Formulardaten <br>' . $mailData
             ;
             $mailer->from = $from;
             $mailer->fromName = $fromName;
