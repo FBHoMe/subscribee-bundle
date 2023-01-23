@@ -1,8 +1,7 @@
 {
     "name": "home/subscribee-bundle",
     "type": "contao-bundle",
-    "version": "0.1.0",
-    "description": "Adds Subscribee to Contao 4",
+    "description": "Adds Subsribee to Contao 4",
     "keywords":["contao","subscribee"],
     "license": "LGPL-3.0+",
     "authors": [
